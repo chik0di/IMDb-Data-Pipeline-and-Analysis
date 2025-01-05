@@ -17,3 +17,6 @@
     - Output Database: Create a new database (imdb_db).
         - I was redirected to choose/create a new Database where the crawled data will be stored, it was quite straightforward.
 - Start the crawler → It will scan the data and create tables in the Glue Catalog.
+
+![image](https://github.com/user-attachments/assets/d9084187-11f8-4fcc-a32d-ec9526c6e0a5)
+
