@@ -18,5 +18,4 @@
         - I was redirected to choose/create a new Database where the crawled data will be stored, it was quite straightforward.
 - Start the crawler → It will scan the data and create tables in the Glue Catalog.
 
-![image](https://github.com/user-attachments/assets/d9084187-11f8-4fcc-a32d-ec9526c6e0a5)
-
+![Crawler run](https://github.com/user-attachments/assets/1c8e2627-a7d7-44e4-a15d-26c7213a5046)
