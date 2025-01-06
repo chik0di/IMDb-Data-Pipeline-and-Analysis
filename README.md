@@ -48,6 +48,7 @@
     WHERE titleType = 'tvSeries' AND endYear IS NULL;
     
 #### Creating New Tables (Stored as Parquet in S3)
+##### top_voted_titles: Analyze the most popular titles based on the number of votes.
     - CREATE TABLE top_voted_titles
     WITH (
         external_location = 's3://imdb-athena-results/processed-data/top_voted_titles/',
@@ -59,4 +60,15 @@
     ON tb.tconst = tr.tconst
     ORDER BY tr.numVotes DESC
     LIMIT 100;
+##### movie_cast_details: Combine cast/crew information with movie details for analysis.
+    CREATE TABLE movie_cast_details
+    WITH (
+        external_location = 's3://imdb-athena-results/processed-data/movie_cast_details/',
+        format = 'Parquet'
+    ) AS
+    SELECT tb.primaryTitle, tp.category, tp.nconst, tp.characters
+    FROM title_basics tb
+    JOIN title_principals tp
+    ON tb.tconst = tp.tconst
+    WHERE tb.titleType = 'movie';
     
