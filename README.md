@@ -30,16 +30,22 @@
 ### Data Wrangling 
 #### SQL Views 
 ##### top_rated_movies: This view joins _title.basics_ with _title.ratings_ to display movies with a rating above 8.0.
-      - CREATE VIEW top_rated_movies AS
+    CREATE VIEW top_rated_movies AS
     SELECT tb.primaryTitle, tb.genres, tr.averageRating, tr.numVotes
     FROM title_basics tb
     JOIN title_ratings tr
     ON tb.tconst = tr.tconst
     WHERE tb.titleType = 'movie' AND tr.averageRating >= 8.0;
-    - 
-  - non-adult_movies: This view filters out adult content from the dataset for safe analysis.
-
-  - active_tv_series: Creates a view for TV series that started but have no end year.
+##### non-adult_movies: This view filters out adult content from the dataset for safe analysis.
+    CREATE VIEW non_adult_titles AS
+    SELECT *
+    FROM title_basics
+    WHERE isAdult = 0;
+##### active_tv_series: Creates a view for TV series that started but have no end year.
+    CREATE VIEW active_tv_series AS
+    SELECT *
+    FROM title_basics
+    WHERE titleType = 'tvSeries' AND endYear IS NULL;
     
 #### Creating New Tables (Stored as Parquet in S3)
     - CREATE TABLE top_voted_titles
