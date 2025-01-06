@@ -1,7 +1,7 @@
 # IMDb-data-pipeline-and-analysis
 
 
-### Procedure
+### Navigating through AWS Athena, AWS S3 and AWS Glue
 - I went over to AWS Athena because I heard I could write queries on it.
 - Athena goes "Psych!" - said I need a Database to at least run queries on and an AWS S3 bucket to store query results in, tbf that made sense.
 - So I marched on to S3 and created a bucket. 
@@ -24,5 +24,7 @@
 - *Crawler Complete*
 - Remember *Athena* sent me to *S3* to create a bucket and eventually a Crawler on *Glue*
 - I returned to *Athena* and set up the db (It was automatically chosen for me)
-- I ran the *Crawler* 3 times so the 5 imdb entites appeared 3 times each making it a total of 15 tables.
-- I DROPped unwanted tables directly from the query editor in Athena
+- I ran the *Crawler* 3 times so the 5 imdb entites appeared 3 times each, making it a total of 15 tables.
+- I DROPped unwanted tables directly from the query editor in Athena. hehe.
+- I ran other queries and directly from the editor and answered business questions.
+- 
