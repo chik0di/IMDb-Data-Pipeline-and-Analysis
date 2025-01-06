@@ -34,4 +34,15 @@
   - non-adult_movies: This view filters out adult content from the dataset for safe analysis.
   - active_tv_series: Creates a view for TV series that started but have no end year.
 #### Creating New Tables (Stored as Parquet in S3)
-    - 
+    - CREATE TABLE top_voted_titles
+WITH (
+    external_location = 's3://imdb-athena-results/processed-data/top_voted_titles/',
+    format = 'Parquet'
+) AS
+SELECT tb.primaryTitle, tr.averageRating, tr.numVotes
+FROM title_basics tb
+JOIN title_ratings tr
+ON tb.tconst = tr.tconst
+ORDER BY tr.numVotes DESC
+LIMIT 100;
+
