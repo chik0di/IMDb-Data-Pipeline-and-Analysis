@@ -26,5 +26,12 @@
 - I returned to *Athena* and set up the db (It was automatically chosen for me)
 - I ran the *Crawler* 3 times so the 5 imdb entites appeared 3 times each, making it a total of 15 tables.
 - I DROPped unwanted tables directly from the query editor in Athena. hehe.
-- I ran other queries and directly from the editor and answered business questions.
-- 
+
+### Data Wrangling 
+#### SQL Views
+- I created new views for 3 separate use cases
+  - top_rated_movies: This view joins _title.basics_ with _title.ratings_ to display movies with a rating above 8.0.
+  - non-adult_movies: This view filters out adult content from the dataset for safe analysis.
+  - active_tv_series: Creates a view for TV series that started but have no end year.
+#### Creating New Tables (Stored as Parquet in S3)
+    - 
