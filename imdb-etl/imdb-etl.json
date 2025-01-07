@@ -1,0 +1,41 @@
+{
+  "name" : "imdb-etl",
+  "jobMode" : "VISUAL",
+  "description" : "",
+  "role" : "arn:aws:iam::423623825073:role/service-role/AWSGlueServiceRole-imdb",
+  "executionProperty" : {
+    "maxConcurrentRuns" : 1
+  },
+  "command" : {
+    "name" : "glueetl",
+    "scriptLocation" : "s3://aws-glue-assets-423623825073-eu-north-1/scripts/imdb-etl.py",
+    "pythonVersion" : "3"
+  },
+  "defaultArguments" : {
+    "--enable-metrics" : "true",
+    "--enable-spark-ui" : "true",
+    "--extra-py-files" : "s3://aws-glue-studio-transforms-312557305497-prod-eu-north-1/gs_common.py,s3://aws-glue-studio-transforms-312557305497-prod-eu-north-1/gs_derived.py,s3://aws-glue-studio-transforms-312557305497-prod-eu-north-1/gs_null_rows.py",
+    "--spark-event-logs-path" : "s3://aws-glue-assets-423623825073-eu-north-1/sparkHistoryLogs/",
+    "--enable-job-insights" : "true",
+    "--enable-observability-metrics" : "true",
+    "--enable-glue-datacatalog" : "true",
+    "--enable-continuous-cloudwatch-log" : "true",
+    "--job-bookmark-option" : "job-bookmark-disable",
+    "--job-language" : "python",
+    "--TempDir" : "s3://aws-glue-assets-423623825073-eu-north-1/temporary/"
+  },
+  "maxRetries" : 0,
+  "allocatedCapacity" : 10,
+  "timeout" : 480,
+  "maxCapacity" : 10.0,
+  "glueVersion" : "5.0",
+  "numberOfWorkers" : 10,
+  "workerType" : "G.1X",
+  "codeGenConfigurationNodes" : "{\"node-1736243599855\":{\"CatalogSource\":{\"Database\":\"imdb_db\",\"Name\":\"imdb-title-ratings\",\"Table\":\"title_ratings\"}},\"node-1736243998381\":{\"Join\":{\"Columns\":[{\"From\":\"node-1736243621729\",\"Keys\":[[\"titleid\"]]},{\"From\":\"node-1736243970546\",\"Keys\":[[\"tconst\"]]}],\"Inputs\":[\"node-1736243621729\",\"node-1736243970546\"],\"JoinType\":\"equijoin\",\"Name\":\"join-key(titleid, tconst)\"}},\"node-1736243646632\":{\"Join\":{\"Columns\":[{\"From\":\"node-1736243599855\",\"Keys\":[[\"tconst\"]]},{\"From\":\"node-1736243095721\",\"Keys\":[[\"tconst\"]]}],\"Inputs\":[\"node-1736243599855\",\"node-1736243095721\"],\"JoinType\":\"equijoin\",\"Name\":\"join-key(tconst)\"}},\"node-1736243621729\":{\"CatalogSource\":{\"Database\":\"imdb_db\",\"Name\":\"imdb-title_akas\",\"Table\":\"title_akas\"}},\"node-1736243970546\":{\"CatalogSource\":{\"Database\":\"imdb_db\",\"Name\":\"imdb-title_principals\",\"Table\":\"title_principals\"}},\"node-1736246575342\":{\"DynamicTransform\":{\"FunctionName\":\"gs_derived\",\"Inputs\":[\"node-1736245947371\"],\"Name\":\"Derived Column\",\"Parameters\":[{\"IsOptional\":false,\"Name\":\"colName\",\"Type\":\"str\",\"Value\":[\"durationCategory\"]},{\"IsOptional\":false,\"Name\":\"expr\",\"Type\":\"str\",\"Value\":[\"CASE      WHEN runtimeMinutes < 90 THEN 'Short'     WHEN runtimeMinutes < 150 THEN 'Medium'     ELSE 'Long' END AS durationCategory\"]}],\"Path\":\"s3://aws-glue-studio-transforms-312557305497-prod-eu-north-1/gs_derived.py\",\"TransformName\":\"gs_derived\",\"Version\":\"1.0.0\"}},\"node-1736247235783\":{\"S3GlueParquetTarget\":{\"AutoDataQuality\":{\"EvaluationContext\":\"EvaluateDataQuality_node1736242689773\",\"IsEnabled\":true},\"Compression\":\"snappy\",\"Inputs\":[\"node-1736247205868\"],\"Name\":\"Amazon S3 Export\",\"PartitionKeys\":[],\"Path\":\"s3://aws-glue-assets-423623825073-eu-north-1/scripts/\",\"SchemaChangePolicy\":{\"EnableUpdateCatalog\":false,\"UpdateBehavior\":\"LOG\"}}},\"node-1736245947371\":{\"Filter\":{\"Filters\":[{\"Negated\":false,\"Operation\":\"EQ\",\"Values\":[{\"Type\":\"COLUMNEXTRACTED\",\"Value\":[\"isadult\"]},{\"Type\":\"CONSTANT\",\"Value\":[\"0\"]}]},{\"Negated\":false,\"Operation\":\"GTE\",\"Values\":[{\"Type\":\"COLUMNEXTRACTED\",\"Value\":[\"startyear\"]},{\"Type\":\"CONSTANT\",\"Value\":[\"2000\"]}]}],\"Inputs\":[\"node-1736246134821\"],\"LogicalOperator\":\"AND\",\"Name\":\"nonAdult, Recent\"}},\"node-1736244536344\":{\"Join\":{\"Columns\":[{\"From\":\"node-1736243646632\",\"Keys\":[[\"tconst\"]]},{\"From\":\"node-1736243998381\",\"Keys\":[[\"tconst\"]]}],\"Inputs\":[\"node-1736243646632\",\"node-1736243998381\"],\"JoinType\":\"equijoin\",\"Name\":\"advanced-join(tconst)\"}},\"node-1736243095721\":{\"CatalogSource\":{\"Database\":\"imdb_db\",\"Name\":\"imdb-title_basics\",\"Table\":\"title_basics\"}},\"node-1736246134821\":{\"ApplyMapping\":{\"Inputs\":[\"node-1736244536344\"],\"Mapping\":[{\"Dropped\":false,\"FromPath\":[\"tconst\"],\"FromType\":\"string\",\"ToKey\":\"tconst\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"averagerating\"],\"FromType\":\"double\",\"ToKey\":\"averagerating\",\"ToType\":\"double\"},{\"Dropped\":false,\"FromPath\":[\"numvotes\"],\"FromType\":\"long\",\"ToKey\":\"numvotes\",\"ToType\":\"long\"},{\"Dropped\":false,\"FromPath\":[\".tconst\"],\"FromType\":\"string\",\"ToKey\":\".tconst\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"titletype\"],\"FromType\":\"string\",\"ToKey\":\"titletype\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"primarytitle\"],\"FromType\":\"string\",\"ToKey\":\"primarytitle\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"originaltitle\"],\"FromType\":\"string\",\"ToKey\":\"originaltitle\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"isadult\"],\"FromType\":\"long\",\"ToKey\":\"isadult\",\"ToType\":\"long\"},{\"Dropped\":false,\"FromPath\":[\"startyear\"],\"FromType\":\"string\",\"ToKey\":\"startyear\",\"ToType\":\"int\"},{\"Dropped\":false,\"FromPath\":[\"endyear\"],\"FromType\":\"string\",\"ToKey\":\"endyear\",\"ToType\":\"int\"},{\"Dropped\":false,\"FromPath\":[\"runtimeminutes\"],\"FromType\":\"string\",\"ToKey\":\"runtimeminutes\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"genres\"],\"FromType\":\"string\",\"ToKey\":\"genres\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"titleid\"],\"FromType\":\"string\",\"ToKey\":\"titleid\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"ordering\"],\"FromType\":\"long\",\"ToKey\":\"ordering\",\"ToType\":\"long\"},{\"Dropped\":false,\"FromPath\":[\"title\"],\"FromType\":\"string\",\"ToKey\":\"title\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"region\"],\"FromType\":\"string\",\"ToKey\":\"region\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"language\"],\"FromType\":\"string\",\"ToKey\":\"language\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"types\"],\"FromType\":\"string\",\"ToKey\":\"types\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"attributes\"],\"FromType\":\"string\",\"ToKey\":\"attributes\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"isoriginaltitle\"],\"FromType\":\"long\",\"ToKey\":\"isoriginaltitle\",\"ToType\":\"long\"},{\"Dropped\":false,\"FromPath\":[\".tconst\"],\"FromType\":\"string\",\"ToKey\":\".tconst\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\".ordering\"],\"FromType\":\"long\",\"ToKey\":\".ordering\",\"ToType\":\"long\"},{\"Dropped\":false,\"FromPath\":[\"nconst\"],\"FromType\":\"string\",\"ToKey\":\"nconst\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"category\"],\"FromType\":\"string\",\"ToKey\":\"category\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"job\"],\"FromType\":\"string\",\"ToKey\":\"job\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"characters\"],\"FromType\":\"string\",\"ToKey\":\"characters\",\"ToType\":\"string\"}],\"Name\":\"Change Schema\"}},\"node-1736247205868\":{\"DynamicTransform\":{\"FunctionName\":\"gs_null_rows\",\"Inputs\":[\"node-1736246575342\"],\"Name\":\"Remove Null Rows\",\"Parameters\":[{\"IsOptional\":true,\"Name\":\"extended\",\"Type\":\"bool\",\"Value\":[\"true\"]}],\"Path\":\"s3://aws-glue-studio-transforms-312557305497-prod-eu-north-1/gs_null_rows.py\",\"TransformName\":\"gs_null_rows\",\"Version\":\"1.0.0\"}}}",
+  "sourceControlDetails" : {
+    "provider" : "GITHUB",
+    "repository" : "IMDb-Data-Pipeline-and-Analysis",
+    "branch" : "main",
+    "folder" : "imdb-etl"
+  }
+}
