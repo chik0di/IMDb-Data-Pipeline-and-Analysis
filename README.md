@@ -71,4 +71,3 @@
     JOIN title_principals tp
     ON tb.tconst = tp.tconst
     WHERE tb.titleType = 'movie';
-    
