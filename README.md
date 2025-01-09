@@ -52,7 +52,7 @@
     - CREATE TABLE top_voted_titles
     WITH (
         external_location = 's3://imdb-athena-results/processed-data/top_voted_titles/',
-        format = 'Parquet'
+        format = 'Parquet'  
     ) AS
     SELECT tb.primaryTitle, tr.averageRating, tr.numVotes
     FROM title_basics tb
