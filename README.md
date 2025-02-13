@@ -1,6 +1,6 @@
 # IMDb-data-pipeline-and-analysis
 
-
+ 
 ### Navigating through AWS Athena, AWS S3 and AWS Glue
 - I went over to AWS Athena because I heard I could write queries on it.
 - Athena goes "Psych!" - said I need a Database to at least run queries on and an AWS S3 bucket to store query results in, tbf that made sense.
