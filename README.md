@@ -9,7 +9,7 @@
 - I was supposed to return to Athena settings to select the newly created bucket location but it was done automatically for me anyway.
 - In S3, I had to create a folder in the bucket and other sub-folders where I uploaded respective entities from the IMDB Dataset - we're talking Gigabytes.
 - I marched on to the *AWS Glue* - I'm outright falling for the AWS technologies naming convention.
-- Apparently I needed a thing that will scan the data uploaded in the S3 Bucket and create tables in the Glue Catalog - it's called a *Crawler*. Phew.
+- Apparently, I needed a thing that will scan the data uploaded in the S3 Bucket and create tables in the Glue Catalog - it's called a *Crawler*. Phew.
 - A crawler connects to a data store (S3 bucket), progresses through a prioritized list of classifiers to determine the schema for your data, and then creates metadata tables in your data catalog.
 - While setting up the *Crawler* -
     - Data Store: S3 → Point to your S3 path, (s3://bucket-name/imdb-data/).
