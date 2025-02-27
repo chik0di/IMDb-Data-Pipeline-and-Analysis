@@ -1,4 +1,4 @@
-# IMDb-data-pipeline-and-analysis
+# IMDb-Data-Pipeline-and-Analysis
 
  
 ### Navigating through AWS Athena, AWS S3 and AWS Glue
